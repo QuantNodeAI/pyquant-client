@@ -9,8 +9,8 @@
 
 _Python client library for the [Helixir API](https://helixir.io/helixir-api)_
 
-
 ## Table of Content
+
 <details>
 <summary>Click to expand!</summary>
 
@@ -19,22 +19,26 @@ _Python client library for the [Helixir API](https://helixir.io/helixir-api)_
 - [Features](#features)
 - [Usage](#usage)
 - [License](#license)
+
 </details>
 
-
 ## Description
-_Helixir_ provides simple to use **API for on-chain data** for numerous blockchains, news & social media data, and comprehensive quant models.
+
+_Helixir_ provides simple to use **API for on-chain data** for numerous blockchains, news & social media data, and
+comprehensive quant models.
 All under one roof.
 
-_Helixir_ is a data provider that offers on-chain data from EVM compatible blockchains, news & social media data and models.
-With our analytical tools, you can find **best entry points** for your trades, **analyze price data** or **create machine learning models** for cryptocurrencies with ease.
+_Helixir_ is a data provider that offers on-chain data from EVM compatible blockchains, news & social media data and
+models.
+With our analytical tools, you can find **best entry points** for your trades, **analyze price data** or **create
+machine learning models** for cryptocurrencies with ease.
 
 Check out the [website](https://helixir.io/) for more information!
-
 
 ## Installation
 
 The library can be installed by running the following command.
+
 ```bash
 python -m pip install git+https://github.com/HelixirLabs/helixir-api-client
 ```
@@ -58,19 +62,21 @@ pip install helixirapi
 - Defined **default values** for the option to omit parameter entry.
 - And other useful features.
 
-
 ## Usage
+
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/HelixirLabs/helixir-api-client/examples/Example.ipynb)
 
 Getting data is as simple as calling one method!
 
-After installing and importing the library, you need to create a _client instance_. Your authentication token is needed for this.
+After installing and importing the library, you need to create a _client instance_. Your authentication token is needed
+for this.
 You can get it [here](TBA-TODO).
 
 Then you can call any of the available methods.
 Look at the two simple examples below.
 
 ### Get Token Info
+
 ```python
 from helixirapi.helixir_api import HelixirApi
 
@@ -95,9 +101,11 @@ TokenResponse(
 	contract = 0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47,
 )
 ```
+
 </details>
 
 ### Get Prices of the Token
+
 ```python
 client.get_candles(
     symbol="ada",
@@ -137,6 +145,7 @@ client.get_candles(
  	close = 1.3171815488561158,
  )]
 ```
+
 </details>
 
 
@@ -144,6 +153,7 @@ See the [examples folder](examples) for more details.
 Or read some article on [Medium](https://medium.com/).
 
 ## License
+
 [![License](https://img.shields.io/badge/License-Apache_2.0-yellow.svg)](LICENSE)
 
 This package is licensed under the [Apache 2.0](LICENSE), so it is open source.

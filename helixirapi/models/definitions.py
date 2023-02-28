@@ -1,5 +1,6 @@
 import keyword
 from typing import List, Dict, Any
+
 from dateutil.parser import isoparse
 
 from helixirapi import models
@@ -10,7 +11,6 @@ class Definition:
     _attribute_is_primitive: Dict[str, bool]
     _attributes_to_types: Dict[str, Any]
 
-
     def __repr__(self) -> str:
         attributes = ""
         for key, value in vars(self).items():
@@ -18,10 +18,8 @@ class Definition:
             attributes += f"\t{key} = {value},\n"
         return f"{self.__class__.__name__}(\n{attributes})"
 
-
     def to_dict(self):
         return self.__dict__
-
 
     def unmarshal_json(self, input_json):
         if isinstance(input_json, list):
@@ -40,7 +38,6 @@ class Definition:
         if isinstance(input_json, float) or isinstance(input_json, int):
             return input_json
 
-
     @staticmethod
     def _unmarshal_json_list(input_json, known_type):
         items = []
@@ -49,7 +46,6 @@ class Definition:
             items.append(new_item._unmarshal_json_object(item))
 
         return items
-
 
     def _unmarshal_json_object(self, input_json):
         for key, value in input_json.items():
@@ -71,8 +67,8 @@ class Definition:
             self.__setattr__(attribute_name, value)
         return self
 
+
 class PoolBalance(Definition):
-    
     _api_name_to_python = {
         "balance": "balance",
         "pending_reward": "pending_reward",
@@ -111,10 +107,9 @@ class PoolBalance(Definition):
         self.reward_token: str
         self.token: str
         self.token_address: str
-    
+
 
 class WhitelistedAddress(Definition):
-    
     _api_name_to_python = {
         "address": "address",
         "id": "id",
@@ -133,10 +128,9 @@ class WhitelistedAddress(Definition):
     def __init__(self):
         self.address: str
         self.id: int
-    
+
 
 class FarmPortfolio(Definition):
-    
     _api_name_to_python = {
         "farm_icon": "farm_icon",
         "farm_name": "farm_name",
@@ -163,10 +157,9 @@ class FarmPortfolio(Definition):
         self.farm_name: str
         self.farm_true_name: str
         self.pools_balance: List[PoolBalance]
-    
+
 
 class TokenResponse(Definition):
-    
     _api_name_to_python = {
         "active": "active",
         "chain": "chain",
@@ -213,10 +206,9 @@ class TokenResponse(Definition):
         self.name: str
         self.symbol: str
         self.total_supply: float
-    
+
 
 class BasicPoolInfo(Definition):
-    
     _api_name_to_python = {
         "apr": "apr",
         "apy": "apy",
@@ -251,10 +243,9 @@ class BasicPoolInfo(Definition):
         self.token: str
         self.token_address: str
         self.tvl: float
-    
+
 
 class BasicOptimizerPoolInfo(Definition):
-    
     _api_name_to_python = {
         "apy": "apy",
         "farm_apr": "farm_apr",
@@ -297,10 +288,9 @@ class BasicOptimizerPoolInfo(Definition):
         self.token: str
         self.token_address: str
         self.tvl: float
-    
+
 
 class BasicPoolInfo(Definition):
-    
     _api_name_to_python = {
         "apr": "apr",
         "apy": "apy",
@@ -335,10 +325,9 @@ class BasicPoolInfo(Definition):
         self.token: str
         self.token_address: str
         self.tvl: float
-    
+
 
 class BasicOptimizerPoolInfo(Definition):
-    
     _api_name_to_python = {
         "apy": "apy",
         "farm_apr": "farm_apr",
@@ -381,10 +370,9 @@ class BasicOptimizerPoolInfo(Definition):
         self.token: str
         self.token_address: str
         self.tvl: float
-    
+
 
 class Domain(Definition):
-    
     _api_name_to_python = {
         "authority": "authority",
         "url": "url",
@@ -403,10 +391,9 @@ class Domain(Definition):
     def __init__(self):
         self.authority: int
         self.url: str
-    
+
 
 class Tag(Definition):
-    
     _api_name_to_python = {
         "id": "id",
         "tag": "tag",
@@ -425,10 +412,9 @@ class Tag(Definition):
     def __init__(self):
         self.id: int
         self.tag: str
-    
+
 
 class BasicPool(Definition):
-    
     _api_name_to_python = {
         "reward_token": "reward_token",
         "token": "token",
@@ -451,10 +437,9 @@ class BasicPool(Definition):
         self.reward_token: str
         self.token: str
         self.token_address: str
-    
+
 
 class BasicOptimizerPool(Definition):
-    
     _api_name_to_python = {
         "from_platform": "from_platform",
         "reward_token": "reward_token",
@@ -481,10 +466,9 @@ class BasicOptimizerPool(Definition):
         self.reward_token: str
         self.token: str
         self.token_address: str
-    
+
 
 class Balance(Definition):
-    
     _api_name_to_python = {
         "createdAt": "createdAt",
         "portfolio": "portfolio",
@@ -511,10 +495,9 @@ class Balance(Definition):
         self.portfolio: str
         self.wallet: WhitelistedAddress
         self.walletID: int
-    
+
 
 class BalanceMove(Definition):
-    
     _api_name_to_python = {
         "move": "move",
         "timestamp": "timestamp",
@@ -541,10 +524,9 @@ class BalanceMove(Definition):
         self.timestamp: str
         self.token_id: int
         self.wallet_id: int
-    
+
 
 class BalanceMoveLP(Definition):
-    
     _api_name_to_python = {
         "move": "move",
         "timestamp": "timestamp",
@@ -571,10 +553,9 @@ class BalanceMoveLP(Definition):
         self.timestamp: str
         self.token_id: int
         self.wallet_id: int
-    
+
 
 class Liquidity(Definition):
-    
     _api_name_to_python = {
         "platform_id": "platform_id",
         "reserve_0": "reserve_0",
@@ -605,10 +586,9 @@ class Liquidity(Definition):
         self.reserve_1: float
         self.timestamp: str
         self.token_id: int
-    
+
 
 class PriceTick(Definition):
-    
     _api_name_to_python = {
         "circulating_supply": "circulating_supply",
         "platform_id": "platform_id",
@@ -643,10 +623,9 @@ class PriceTick(Definition):
         self.price_stable: float
         self.timestamp: str
         self.token_id: int
-    
+
 
 class VolumeTick(Definition):
-    
     _api_name_to_python = {
         "platform_id": "platform_id",
         "timestamp": "timestamp",
@@ -673,10 +652,9 @@ class VolumeTick(Definition):
         self.timestamp: str
         self.token_id: int
         self.volume: float
-    
+
 
 class ActiveAddressesResponse(Definition):
-    
     _api_name_to_python = {
         "count": "count",
         "time": "time",
@@ -695,10 +673,9 @@ class ActiveAddressesResponse(Definition):
     def __init__(self):
         self.count: int
         self.time: isoparse
-    
+
 
 class FarmResponse(Definition):
-    
     _api_name_to_python = {
         "name": "name",
         "true_name": "true_name",
@@ -721,10 +698,9 @@ class FarmResponse(Definition):
         self.name: str
         self.true_name: str
         self.tvl: float
-    
+
 
 class FarmsPortfolioResponse(Definition):
-    
     _api_name_to_python = {
         "lp_pools": "lp_pools",
         "optimizer_lp_pools": "optimizer_lp_pools",
@@ -751,10 +727,9 @@ class FarmsPortfolioResponse(Definition):
         self.optimizer_lp_pools: List[FarmPortfolio]
         self.optimizer_single_asset_pools: List[FarmPortfolio]
         self.single_asset_pools: List[FarmPortfolio]
-    
+
 
 class LPLiquidityResponse(Definition):
-    
     _api_name_to_python = {
         "liquidity_0": "liquidity_0",
         "liquidity_1": "liquidity_1",
@@ -777,10 +752,9 @@ class LPLiquidityResponse(Definition):
         self.liquidity_0: float
         self.liquidity_1: float
         self.time: isoparse
-    
+
 
 class LPMoveResponse(Definition):
-    
     _api_name_to_python = {
         "amount_0": "amount_0",
         "amount_1": "amount_1",
@@ -811,10 +785,9 @@ class LPMoveResponse(Definition):
         self.time: isoparse
         self.token_contract: str
         self.token_symbol: str
-    
+
 
 class LPTokenResponse(Definition):
-    
     _api_name_to_python = {
         "chain": "chain",
         "contract": "contract",
@@ -861,10 +834,9 @@ class LPTokenResponse(Definition):
         self.token_0: TokenResponse
         self.token_1: TokenResponse
         self.total_supply: float
-    
+
 
 class PoolsInfoResponse(Definition):
-    
     _api_name_to_python = {
         "lp_pools": "lp_pools",
         "optimizer_lp_pools": "optimizer_lp_pools",
@@ -891,10 +863,9 @@ class PoolsInfoResponse(Definition):
         self.optimizer_lp_pools: List[BasicOptimizerPoolInfo]
         self.optimizer_single_asset_pools: List[BasicOptimizerPoolInfo]
         self.single_asset_pools: List[BasicPoolInfo]
-    
+
 
 class PoolsResponse(Definition):
-    
     _api_name_to_python = {
         "lp_pools": "lp_pools",
         "optimizer_lp_pools": "optimizer_lp_pools",
@@ -921,10 +892,9 @@ class PoolsResponse(Definition):
         self.optimizer_lp_pools: List[BasicOptimizerPool]
         self.optimizer_single_asset_pools: List[BasicOptimizerPool]
         self.single_asset_pools: List[BasicPool]
-    
+
 
 class PortfolioResponse(Definition):
-    
     _api_name_to_python = {
         "portfolio": "portfolio",
         "time": "time",
@@ -943,10 +913,9 @@ class PortfolioResponse(Definition):
     def __init__(self):
         self.portfolio: str
         self.time: isoparse
-    
+
 
 class TokenPortfolioResponse(Definition):
-    
     _api_name_to_python = {
         "balance": "balance",
         "token_address": "token_address",
@@ -981,10 +950,9 @@ class TokenPortfolioResponse(Definition):
         self.token_name: str
         self.token_symbol: str
         self.usd_value: float
-    
+
 
 class TokenPriceResponse(Definition):
-    
     _api_name_to_python = {
         "close": "close",
         "high": "high",
@@ -1015,10 +983,9 @@ class TokenPriceResponse(Definition):
         self.low: float
         self.open: float
         self.time: isoparse
-    
+
 
 class TokenResponseExtended(Definition):
-    
     _api_name_to_python = {
         "active": "active",
         "chain": "chain",
@@ -1093,10 +1060,9 @@ class TokenResponseExtended(Definition):
         self.symbol: str
         self.total_supply: float
         self.volume_24_h: float
-    
+
 
 class TradedVolumeResponse(Definition):
-    
     _api_name_to_python = {
         "time": "time",
         "volume": "volume",
@@ -1115,10 +1081,9 @@ class TradedVolumeResponse(Definition):
     def __init__(self):
         self.time: isoparse
         self.volume: float
-    
+
 
 class TransactionResponse(Definition):
-    
     _api_name_to_python = {
         "block": "block",
         "from_address": "from_address",
@@ -1157,10 +1122,9 @@ class TransactionResponse(Definition):
         self.tx_fee: float
         self.tx_hash: str
         self.value: float
-    
+
 
 class WalletMoveResponse(Definition):
-    
     _api_name_to_python = {
         "amount": "amount",
         "time": "time",
@@ -1183,10 +1147,34 @@ class WalletMoveResponse(Definition):
         self.amount: float
         self.time: isoparse
         self.token: str
-    
+
+
+class MarketDepth(Definition):
+    _api_name_to_python = {
+        "time": "time",
+        "current_price": "current_price",
+        "depth": "depth",
+    }
+
+    _attribute_is_primitive = {
+        "time": True,
+        "current_price": True,
+        "depth": True,
+    }
+
+    _attributes_to_types = {
+        "time": isoparse,
+        "current_price": float,
+        "depth": str,
+    }
+
+    def __init__(self):
+        self.time: isoparse
+        self.current_price: float
+        self.depth: str
+
 
 class AvailableAsset(Definition):
-    
     _api_name_to_python = {
         "chain": "chain",
         "contract": "contract",
@@ -1213,10 +1201,9 @@ class AvailableAsset(Definition):
         self.contract: str
         self.is_default: bool
         self.symbol: str
-    
+
 
 class DiscordPublicMessage(Definition):
-    
     _api_name_to_python = {
         "content": "content",
         "created_at": "created_at",
@@ -1239,10 +1226,9 @@ class DiscordPublicMessage(Definition):
         self.content: str
         self.created_at: isoparse
         self.id: int
-    
+
 
 class PublicReadable(Definition):
-    
     _api_name_to_python = {
         "created_at": "created_at",
         "domain": "domain",
@@ -1273,10 +1259,9 @@ class PublicReadable(Definition):
         self.source: str
         self.text: str
         self.title: str
-    
+
 
 class Readable(Definition):
-    
     _api_name_to_python = {
         "comment_count": "comment_count",
         "created_at": "created_at",
@@ -1327,10 +1312,9 @@ class Readable(Definition):
         self.tags: List[Tag]
         self.title: str
         self.view_count: int
-    
+
 
 class TelegramPublicMessage(Definition):
-    
     _api_name_to_python = {
         "content": "content",
         "created_at": "created_at",
@@ -1357,10 +1341,9 @@ class TelegramPublicMessage(Definition):
         self.created_at: isoparse
         self.message_id: int
         self.sent_at: isoparse
-    
+
 
 class TweetPublic(Definition):
-    
     _api_name_to_python = {
         "content": "content",
         "created_at": "created_at",
@@ -1383,4 +1366,3 @@ class TweetPublic(Definition):
         self.content: str
         self.created_at: isoparse
         self.tweet_id: int
-    
