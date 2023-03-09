@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 
 from dateutil.parser import isoparse
 
-from helixirapi import models
+from quantnote_api import models
 
 
 class Definition:

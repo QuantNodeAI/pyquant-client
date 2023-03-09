@@ -1,6 +1,6 @@
 from typing import Type
 
-from helixirapi import models
+from quantnote_api import models
 
 name_to_class = {
     "int": int,

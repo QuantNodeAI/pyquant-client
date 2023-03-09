@@ -23,13 +23,13 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from helixirapi import models
-from helixirapi.models import unmarshal
+from quantnote_api import models
+from quantnote_api.models import unmarshal
 
 Timeframes = Literal["M1", "M5", "M10", "M15", "M30", "H1", "H4", "H12", "D1", "W1", "MN1"]
 
 
-class HelixirApi:
+class QuantNoteApi:
     """
     Main rest API client library class.
 
@@ -112,7 +112,7 @@ class HelixirApi:
         self.split_request = split_request
         self.headers = {
             "Content-Type": "application/json",
-            "Authorization": self.auth_token
+            "User-Agent": "QuantNoteClient"
         }
         self.api_server = self.DEFAULT_API_SERVER + self.API_VERSION
         self.assets_list = None
@@ -140,6 +140,11 @@ class HelixirApi:
             step = self.candle_limits[params["resolution"]]
         step = min(step, self.candle_seconds[params["resolution"]] * self.CANDLE_LIMIT)
 
+        if self.auth_token != "":
+            if params is None:
+                params = {}
+            params["token"] = self.auth_token
+
         if not self.split_request:
             delta = params["from"] - params["to"]
             if delta / self.candle_seconds[params["resolution"]] > self.CANDLE_LIMIT or delta > step:
@@ -165,6 +170,11 @@ class HelixirApi:
                          timeout: float = None) -> Type[models.AnyDefinition]:
         if timeout_repetitions is None:
             timeout_repetitions = self.timeout_repetitions
+
+        if self.auth_token != "":
+            if params is None:
+                params = {}
+            params["token"] = self.auth_token
 
         absolute_url = f"{self.api_server}/{endpoint}"
         try:
@@ -340,7 +350,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/farms"
+        url = f"chain/{chain}/farms"
         return self._handle_response(response_type="List[FarmResponse]", endpoint=url, method="GET")
 
     def get_optimizers_number(self, chain: Union[str, int] = "bsc", validate_params: bool = True) -> int:
@@ -358,7 +368,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/farms/optimizers/number"
+        url = f"chain/{chain}/farms/optimizers/number"
         return self._handle_response(response_type="int", endpoint=url, method="GET")
 
     def get_yields_number(self, chain: Union[str, int] = "bsc", validate_params: bool = True) -> int:
@@ -376,7 +386,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/farms/yields/number"
+        url = f"chain/{chain}/farms/yields/number"
         return self._handle_response(response_type="int", endpoint=url, method="GET")
 
     def get_pools(self, platform: str, chain: Union[str, int] = "bsc",
@@ -397,7 +407,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/farms/{platform}/pools"
+        url = f"chain/{chain}/farms/{platform}/pools"
         return self._handle_response(response_type="PoolsResponse", endpoint=url, method="GET")
 
     def get_pools_info(self, platform: str, chain: Union[str, int] = "bsc",
@@ -418,7 +428,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/farms/{platform}/pools/info"
+        url = f"chain/{chain}/farms/{platform}/pools/info"
         return self._handle_response(response_type="PoolsInfoResponse", endpoint=url, method="GET")
 
     def get_lps(self, limit: int = None, page: int = None, sort: str = None, chain: Union[str, int] = "bsc",
@@ -453,7 +463,7 @@ class HelixirApi:
             "page": page,
             "sort": sort,
         }
-        url = f"{chain}/lps"
+        url = f"chain/{chain}/lps"
         return self._handle_response(response_type="List[TokenResponseExtended]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -472,7 +482,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/lps/number"
+        url = f"chain/{chain}/lps/number"
         return self._handle_response(response_type="int", endpoint=url, method="GET")
 
     def get_lp_token(self, symbol: str = None, contract: str = None, chain: Union[str, int] = "bsc",
@@ -496,7 +506,7 @@ class HelixirApi:
         if validate_params:
             contract = self._validate_symbol_contract_chain(symbol, contract, chain)
 
-        url = f"{chain}/lps/{contract}"
+        url = f"chain/{chain}/lps/{contract}"
         return self._handle_response(response_type="LPTokenResponse", endpoint=url, method="GET")
 
     def get_lps_liquidity(self, symbol: str = None, contract: str = None, from_: Union[str, int, dt] = None,
@@ -534,7 +544,7 @@ class HelixirApi:
             "to": to,
             "resolution": resolution,
         }
-        url = f"{chain}/lps/{contract}/liquidity"
+        url = f"chain/{chain}/lps/{contract}/liquidity"
         return self._handle_candle_response(response_type="List[LPLiquidityResponse]", endpoint=url, method="GET",
                                             params=query_params)
 
@@ -559,7 +569,7 @@ class HelixirApi:
         if validate_params:
             contract = self._validate_symbol_contract_chain(symbol, contract, chain)
 
-        url = f"{chain}/lps/{contract}/price"
+        url = f"chain/{chain}/lps/{contract}/price"
         return self._handle_response(response_type="float", endpoint=url, method="GET")
 
     def get_lps_swaps(self, from_wallet: str = None, token_contract: str = None, limit: int = None, page: int = None,
@@ -612,7 +622,7 @@ class HelixirApi:
             "page": page,
             "sort": sort,
         }
-        url = f"{chain}/lps/{contract}/swaps"
+        url = f"chain/{chain}/lps/{contract}/swaps"
         return self._handle_response(response_type="List[LPMoveResponse]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -651,7 +661,7 @@ class HelixirApi:
             "page": page,
             "sort": sort,
         }
-        url = f"{chain}/tokens"
+        url = f"chain/{chain}/tokens"
         return self._handle_response(response_type="List[TokenResponseExtended]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -670,7 +680,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/tokens/number"
+        url = f"chain/{chain}/tokens/number"
         return self._handle_response(response_type="int", endpoint=url, method="GET")
 
     def get_token(self, symbol: str = None, contract: str = None, extended: bool = None, chain: Union[str, int] = "bsc",
@@ -699,7 +709,7 @@ class HelixirApi:
         query_params = {
             "extended": extended,
         }
-        url = f"{chain}/tokens/{contract}"
+        url = f"chain/{chain}/tokens/{contract}"
         return self._handle_response(response_type="TokenResponse", endpoint=url, method="GET", params=query_params)
 
     def get_active_addresses(self, symbol: str = None, contract: str = None, from_: Union[str, int, dt] = None,
@@ -737,7 +747,7 @@ class HelixirApi:
             "to": to,
             "resolution": resolution,
         }
-        url = f"{chain}/tokens/{contract}/active_addresses"
+        url = f"chain/{chain}/tokens/{contract}/active_addresses"
         return self._handle_candle_response(response_type="List[ActiveAddressesResponse]", endpoint=url, method="GET",
                                             params=query_params)
 
@@ -783,7 +793,7 @@ class HelixirApi:
             "resolution": resolution,
             "platform": platform,
         }
-        url = f"{chain}/tokens/{contract}/candles"
+        url = f"chain/{chain}/tokens/{contract}/candles"
         return self._handle_candle_response(response_type="List[TokenPriceResponse]", endpoint=url, method="GET",
                                             params=query_params)
 
@@ -808,7 +818,7 @@ class HelixirApi:
         if validate_params:
             contract = self._validate_symbol_contract_chain(symbol, contract, chain)
 
-        url = f"{chain}/tokens/{contract}/holders"
+        url = f"chain/{chain}/tokens/{contract}/holders"
         return self._handle_response(response_type="int", endpoint=url, method="GET")
 
     def get_market_cap(self, symbol: str = None, contract: str = None, chain: Union[str, int] = "bsc",
@@ -832,7 +842,7 @@ class HelixirApi:
         if validate_params:
             contract = self._validate_symbol_contract_chain(symbol, contract, chain)
 
-        url = f"{chain}/tokens/{contract}/market_cap"
+        url = f"chain/{chain}/tokens/{contract}/market_cap"
         return self._handle_response(response_type="float", endpoint=url, method="GET")
 
     def get_pairs(self, symbol: str = None, contract: str = None, chain: Union[str, int] = "bsc",
@@ -856,7 +866,7 @@ class HelixirApi:
         if validate_params:
             contract = self._validate_symbol_contract_chain(symbol, contract, chain)
 
-        url = f"{chain}/tokens/{contract}/pairs"
+        url = f"chain/{chain}/tokens/{contract}/pairs"
         return self._handle_response(response_type="Dict[str, LPTokenResponse]", endpoint=url, method="GET")
 
     def get_price(self, symbol: str = None, contract: str = None, chain: Union[str, int] = "bsc", against: str = None,
@@ -886,7 +896,7 @@ class HelixirApi:
         query_params = {
             "against": against,
         }
-        url = f"{chain}/tokens/{contract}/price"
+        url = f"chain/{chain}/tokens/{contract}/price"
         return self._handle_response(response_type="float", endpoint=url, method="GET", params=query_params)
 
     def get_price_change(self, symbol: str = None, contract: str = None, chain: Union[str, int] = "bsc",
@@ -920,7 +930,7 @@ class HelixirApi:
             "against": against,
             "interval": interval,
         }
-        url = f"{chain}/tokens/{contract}/price/change"
+        url = f"chain/{chain}/tokens/{contract}/price/change"
         return self._handle_response(response_type="float", endpoint=url, method="GET", params=query_params)
 
     def get_swaps(self, from_wallet: str = None, lp_token: str = None, limit: int = None, page: int = None,
@@ -973,7 +983,7 @@ class HelixirApi:
             "page": page,
             "sort": sort,
         }
-        url = f"{chain}/tokens/{contract}/swaps"
+        url = f"chain/{chain}/tokens/{contract}/swaps"
         return self._handle_response(response_type="List[LPMoveResponse]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -1012,7 +1022,7 @@ class HelixirApi:
             "to": to,
             "resolution": resolution,
         }
-        url = f"{chain}/tokens/{contract}/swaps/number"
+        url = f"chain/{chain}/tokens/{contract}/swaps/number"
         return self._handle_candle_response(response_type="List[ActiveAddressesResponse]", endpoint=url, method="GET",
                                             params=query_params)
 
@@ -1051,7 +1061,7 @@ class HelixirApi:
             "to": to,
             "resolution": resolution,
         }
-        url = f"{chain}/tokens/{contract}/volumes"
+        url = f"chain/{chain}/tokens/{contract}/volumes"
         return self._handle_candle_response(response_type="List[TradedVolumeResponse]", endpoint=url, method="GET",
                                             params=query_params)
 
@@ -1082,7 +1092,7 @@ class HelixirApi:
         query_params = {
             "interval": interval,
         }
-        url = f"{chain}/tokens/{contract}/volumes/change"
+        url = f"chain/{chain}/tokens/{contract}/volumes/change"
         return self._handle_response(response_type="float", endpoint=url, method="GET", params=query_params)
 
     def get_volumes_latest(self, symbol: str = None, contract: str = None, chain: Union[str, int] = "bsc",
@@ -1112,7 +1122,7 @@ class HelixirApi:
         query_params = {
             "interval": interval,
         }
-        url = f"{chain}/tokens/{contract}/volumes/latest"
+        url = f"chain/{chain}/tokens/{contract}/volumes/latest"
         return self._handle_response(response_type="float", endpoint=url, method="GET", params=query_params)
 
     def get_wallets_number(self, chain: Union[str, int] = "bsc", validate_params: bool = True) -> int:
@@ -1130,7 +1140,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/wallets/number"
+        url = f"chain/{chain}/wallets/number"
         return self._handle_response(response_type="int", endpoint=url, method="GET")
 
     def get_wallets_farm_portfolio(self, address: str, chain: Union[str, int] = "bsc", validate_params: bool = True) -> \
@@ -1151,7 +1161,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/wallets/{address}/farm_portfolio"
+        url = f"chain/{chain}/wallets/{address}/farm_portfolio"
         return self._handle_response(response_type="FarmsPortfolioResponse", endpoint=url, method="GET")
 
     def get_wallets_historic_farm_portfolio(self, address: str, from_: Union[str, int, dt] = None,
@@ -1182,7 +1192,7 @@ class HelixirApi:
             "from": from_,
             "to": to,
         }
-        url = f"{chain}/wallets/{address}/historic_farm_portfolio"
+        url = f"chain/{chain}/wallets/{address}/historic_farm_portfolio"
         return self._handle_response(response_type="List[PortfolioResponse]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -1214,7 +1224,7 @@ class HelixirApi:
             "from": from_,
             "to": to,
         }
-        url = f"{chain}/wallets/{address}/historic_portfolio"
+        url = f"chain/{chain}/wallets/{address}/historic_portfolio"
         return self._handle_response(response_type="List[PortfolioResponse]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -1253,7 +1263,7 @@ class HelixirApi:
             "to": to,
             "resolution": resolution,
         }
-        url = f"{chain}/wallets/{address}/moves"
+        url = f"chain/{chain}/wallets/{address}/moves"
         return self._handle_candle_response(response_type="List[WalletMoveResponse]", endpoint=url, method="GET",
                                             params=query_params)
 
@@ -1275,7 +1285,7 @@ class HelixirApi:
         if validate_params:
             self._validate_chain(chain)
 
-        url = f"{chain}/wallets/{address}/portfolio"
+        url = f"chain/{chain}/wallets/{address}/portfolio"
         return self._handle_response(response_type="List[TokenPortfolioResponse]", endpoint=url, method="GET")
 
     def get_wallets_swaps(self, address: str, token_contract: str = None, lp_token: str = None, limit: int = None,
@@ -1325,7 +1335,7 @@ class HelixirApi:
             "page": page,
             "sort": sort,
         }
-        url = f"{chain}/wallets/{address}/swaps"
+        url = f"chain/{chain}/wallets/{address}/swaps"
         return self._handle_response(response_type="List[LPMoveResponse]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -1365,7 +1375,7 @@ class HelixirApi:
             "limit": limit,
             "page": page,
         }
-        url = f"{chain}/wallets/{address}/txs"
+        url = f"chain/{chain}/wallets/{address}/txs"
         return self._handle_response(response_type="List[TransactionResponse]", endpoint=url, method="GET",
                                      params=query_params)
 
@@ -1397,7 +1407,7 @@ class HelixirApi:
             "from": from_,
             "to": to
         }
-        url = f"{chain}/lps/{pool_contract}/market_depth"
+        url = f"chain/{chain}/lps/{pool_contract}/market_depth"
         return self._handle_response(response_type="List[MarketDepth]", endpoint=url, method="GET",
                                      params=query_params)
 
