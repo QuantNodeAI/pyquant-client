@@ -40,7 +40,7 @@ Check out the [website](https://quantnote.com/) for more information!
 The library can be installed by running the following command.
 
 ```bash
-python -m pip install git+https://github.com/HelixirLabs/helixir-api-client
+python -m pip install git+https://github.com/QuantNote/pyquant-client.git
 ```
 
 Or using the PyPI packages repository (not yet available).
